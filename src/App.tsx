@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, ReactElement } from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -7,7 +7,7 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import { Toaster } from '@/components/ui/toaster';
 
-function App() {
+function App(): ReactElement {
   useEffect(() => {
     document.documentElement.classList.add('dark');
   }, []);

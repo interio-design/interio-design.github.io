@@ -1,12 +1,16 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
+import type { PluginOption } from 'vite';
 import { EDIT_MODE_STYLES } from './visual-editor-config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = resolve(__filename, '..');
 
-export default function inlineEditDevPlugin() {
+/**
+ * Vite plugin that enables edit mode in development
+ */
+export default function inlineEditDevPlugin(): PluginOption {
   return {
     name: 'vite:inline-edit-dev',
     apply: 'serve',
@@ -19,14 +23,14 @@ export default function inlineEditDevPlugin() {
           tag: 'script',
           attrs: { type: 'module' },
           children: scriptContent,
-          injectTo: 'body'
+          injectTo: 'body',
         },
         {
           tag: 'style',
           children: EDIT_MODE_STYLES,
-          injectTo: 'head'
-        }
+          injectTo: 'head',
+        },
       ];
-    }
+    },
   };
 }
