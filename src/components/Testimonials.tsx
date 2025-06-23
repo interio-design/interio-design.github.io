@@ -15,23 +15,23 @@ const Testimonials = (): JSX.Element => {
   const testimonials: Testimonial[] = [
     {
       name: 'Priya Sharma',
-      role: 'Homeowner, Mumbai',
+      role: 'Homeowner',
       image: 'Indian woman in modern apartment',
       rating: 5,
       text: 'The Grooveline Interio turned our flat into a beautiful sanctuary! Their understanding of Vastu and modern aesthetics is remarkable. Every corner now tells a story.',
-      project: 'Contemporary Mumbai Apartment'
+      project: 'Contemporary Apartment'
     },
     {
       name: 'Rajesh Kumar',
-      role: 'Startup Founder, Bangalore',
+      role: 'Startup Founder',
       image: 'Indian man in vibrant co-working space',
       rating: 5,
       text: 'Fantastic work on our new office! The team created an energetic and collaborative environment. Our team loves the new space, and it truly reflects our brand.',
-      project: 'Dynamic Startup Office'
+      project: 'Dynamic Office Space'
     },
     {
       name: 'Aisha Khan',
-      role: 'Fashion Boutique Owner, Delhi',
+      role: 'Fashion Boutique Owner',
       image: 'Indian woman in chic boutique',
       rating: 5,
       text: 'I am thrilled with my boutique\'s new look! They captured the essence of my brand perfectly. The design is elegant, inviting, and has boosted sales!',
@@ -39,15 +39,15 @@ const Testimonials = (): JSX.Element => {
     },
     {
       name: 'Vikram Singh',
-      role: 'Restaurant Owner, Jaipur',
+      role: 'Restaurant Owner',
       image: 'Indian man in traditional yet modern restaurant',
       rating: 5,
-      text: 'Our restaurant\'s ambiance is now the talk of the town, thanks to The Grooveline Interio. They blended Rajasthani heritage with modern flair beautifully.',
+      text: 'Our restaurant\'s ambiance is now the talk of the town, thanks to The Grooveline Interio. They blended heritage with modern flair beautifully.',
       project: 'Heritage Fusion Restaurant'
     },
     {
       name: 'Meera Reddy',
-      role: 'Homeowner, Hyderabad',
+      role: 'Homeowner',
       image: 'Indian family in spacious living room',
       rating: 5,
       text: 'From the initial design to the final touches, their professionalism was top-notch. Our home is now a perfect blend of comfort and luxury. Highly recommended!',
@@ -55,10 +55,10 @@ const Testimonials = (): JSX.Element => {
     },
     {
       name: 'Arjun Desai',
-      role: 'Hotelier, Goa',
+      role: 'Hotelier',
       image: 'Indian man in beachfront hotel lobby',
       rating: 5,
-      text: 'The resort\'s new look has exceeded our expectations. The design perfectly captures the Goan spirit while offering modern luxury. Our guests are delighted!',
+      text: 'The resort\'s new look has exceeded our expectations. The design perfectly captures the spirit while offering modern luxury. Our guests are delighted!',
       project: 'Beach Resort Renovation'
     }
   ];
@@ -154,9 +154,12 @@ const Testimonials = (): JSX.Element => {
           <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
             Join our growing list of satisfied clients and experience the difference of working with a team that truly cares about your vision.
           </p>
-          <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+          <a 
+            href="#contact"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+          >
             Schedule a Free Consultation
-          </button>
+          </a>
         </motion.div>
       </div>
     </section>

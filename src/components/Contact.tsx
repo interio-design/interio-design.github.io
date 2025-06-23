@@ -1,6 +1,6 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, Send, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, Facebook, Instagram, Twitter, Linkedin, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -17,6 +17,7 @@ interface FormData {
 
 const Contact = (): JSX.Element => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -33,7 +34,7 @@ const Contact = (): JSX.Element => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.message) {
@@ -45,18 +46,55 @@ const Contact = (): JSX.Element => {
       return;
     }
 
-    toast({
-      title: "Message Sent Successfully! 🎉",
-      description: "Thank you for contacting us. We'll get back to you within 24 hours.",
-    });
+    setIsSubmitting(true);
 
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    });
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "c8d82d2c-7b3f-488f-8746-cfb117e49f36",
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          from_name: "Grooveline Interio Website",
+          replyto: formData.email,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Message Sent Successfully! 🎉",
+          description: "Thank you for contacting us. We'll get back to you within 24 working hours.",
+        });
+
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        throw new Error(result.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error",
+        description: "There was an error sending your message. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,13 +115,13 @@ const Contact = (): JSX.Element => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="space-y-8"
+            className="h-full"
           >
             <Card className="border-0 shadow-lg overflow-hidden">
               <CardHeader className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
@@ -155,23 +193,6 @@ const Contact = (): JSX.Element => {
                 </div>
               </CardContent>
             </Card>
-
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
-              <div className="p-8">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Visit Our Showroom</h3>
-                <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden mb-6">
-                  <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400">
-                    Map Placeholder
-                  </div>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  Visit our showroom to explore our latest designs and discuss your project with our design experts.
-                </p>
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-                  Get Directions
-                </Button>
-              </div>
-            </div>
           </motion.div>
 
           <motion.div
@@ -179,6 +200,7 @@ const Contact = (): JSX.Element => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="h-full"
           >
             <Card className="border-0 shadow-lg overflow-hidden">
               <CardHeader className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
@@ -267,12 +289,22 @@ const Contact = (): JSX.Element => {
                   </div>
 
                   <div className="flex items-center">
-                    <Button
-                      type="submit"
-                      className="px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+                    <Button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-6 text-lg font-semibold disabled:opacity-80 disabled:cursor-not-allowed"
                     >
-                      <Send className="mr-2 h-5 w-5" />
-                      Send Message
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="mr-2 h-5 w-5" />
+                          Send Message
+                        </>
+                      )}
                     </Button>
                   </div>
                 </form>
