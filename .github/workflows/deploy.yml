@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+env:
+  # Replace with your GitHub username and public repository name
+  PUBLIC_REPO: interio-design/interio-design.github.io
+  PUBLIC_REPO_BRANCH: gh-pages # or 'main' if using user/organization pages
+  COMMIT_EMAIL: github-actions@github.com
+  COMMIT_USERNAME: GitHub Actions
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to public repository
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          # This should be a personal access token (PAT) with repo permissions
+          token: ${{ secrets.GH_PAGES_TOKEN }}
+          # The folder the action should change to before pushing
+          folder: dist
+          # The repository the action should be deployed to
+          repository-name: ${{ env.PUBLIC_REPO }}
+          branch: ${{ env.PUBLIC_REPO_BRANCH }}
+          # The git commit message
+          commit-message: "Deploy: Update GitHub Pages"
+          clean: true
+          clean-exclude: |
+            .git
+            .gitignore
+            README.md
+            CNAME
