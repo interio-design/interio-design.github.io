@@ -3,13 +3,14 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  workflow_dispatch:  # Allow manual trigger
 
 env:
-  # Replace with your GitHub username and public repository name
   PUBLIC_REPO: interio-design/interio-design.github.io
-  PUBLIC_REPO_BRANCH: gh-pages # or 'main' if using user/organization pages
+  PUBLIC_REPO_BRANCH: main  # Using main branch for user/organization pages
   COMMIT_EMAIL: github-actions@github.com
   COMMIT_USERNAME: GitHub Actions
+  NODE_VERSION: 20
 
 jobs:
   build-and-deploy:
@@ -23,14 +24,17 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: |
+          npm install
+          npm run build
+          touch dist/.nojekyll  # Add .nojekyll to prevent Jekyll processing
 
       - name: Deploy to public repository
         uses: JamesIves/github-pages-deploy-action@v4

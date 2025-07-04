@@ -196,8 +196,8 @@ logger.error = (msg, options) => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // TypeScript support is enabled by default in Vite 4+
-  // No need for special configuration for .tsx files
+  // Base URL for GitHub Pages
+  base: '/',
   customLogger: logger,
   plugins: [
     ...(isDev ? [inlineEditPlugin(), editModeDevPlugin()] : []),

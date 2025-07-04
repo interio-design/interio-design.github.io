@@ -1,6 +1,7 @@
 {
 	"name": "gooveline-interio",
 	"type": "module",
+	"homepage": "https://interio-design.github.io",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
